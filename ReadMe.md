@@ -2,6 +2,8 @@
 
 ## 数据库的配置
 
+sql文件为根目录下面的hanjia.sql
+
 ```
 var connection = mysql.createConnection({     
   host     : 'localhost',       
