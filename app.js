@@ -73,8 +73,8 @@ onerror(app)
 var connection = mysql.createConnection({     
   host     : 'localhost',       
   user     : 'root',              
-  password : 'password',       
-  port: '3305',                   
+  password : '1998Zhenwucxy!',       
+  port: '3306',                   
   database: 'hanjia' 
 });
 connection.connect();
@@ -403,12 +403,13 @@ router.post('/SignUp', upload.array('avatar', 1), async (ctx) => {
   console.log("接收到了pass"+Password);
   console.log("接收到了usernam"+UserName)
   console.log("收到的文件的信息"+ctx.req.files[0].filename);
-    let sqlUserName=`SELECT UserName FROM USERINFO WHERE UserName="${UserName}"`;
+    let sqlUserName=`SELECT UserName FROM userinfo WHERE UserName="${UserName}"`;
      const queryUserName=function checkUserName(sql){
+       console.log(sql);
        return new Promise((resolve,reject)=>{
         connection.query(sql,function(err,result){
           if (err){
-            console.log("查询出错");
+            console.log('[INSERT ERROR] - ',err.message);
           }else{
             resolve(result);
           }
@@ -424,7 +425,7 @@ router.post('/SignUp', upload.array('avatar', 1), async (ctx) => {
         state:"该用户名已被注册",
       }
     }else{
-         let filename="http://localhost:3000/"+ctx.req.files[0].filename;
+         let filename="http://47.97.190.96:3000/"+ctx.req.files[0].filename;
          let sql=`insert INTO USERINFO (USERNAME,PASSWORD,HEADIMAGE) VALUES ("${UserName}","${Password}","${filename}")`;
          let queryRegist=function checkRegist(sql){
              return new Promise((resolve,reject)=>{
@@ -481,8 +482,10 @@ let resultUserName=await queryUserName(sqlUserName);
   //   })
   // }
   // let resultToken=await queryToken(TokenX);
+  // console.log("查询到的密码"+resultUserName[0].Password);
+  console.log("用户给的密码"+Password);
 
-if (resultUserName[0].Password!=Password){
+if (resultUserName[0]==null||resultUserName[0].Password!=Password){
  ctx.body={
    state:"failed"
  }
@@ -582,7 +585,7 @@ router.post("/PushWeibo",upload.array('avatar', 5),async(ctx,next)=>{
    var WeiboId=resultUserName[0].WeiboId;
    var ImageList=new Array();
    ctx.req.files.forEach(item=>{
-         item.filename="http://localhost:3000/"+item.filename;
+         item.filename="http://47.97.190.96:3000/"+item.filename;
          ImageList.push(item.filename);
    });
    console.log("--------ImageList");
@@ -846,47 +849,47 @@ router.get("/GetOtherInfo",async(ctx,next)=>{
    ctx.body=FinalResult;
     // ctx.body={
     //   UserName:"其他人",
-    //   HeadImage:"http://localhost:3000/test.jpg",
+    //   HeadImage:"http://47.97.190.96:3000/test.jpg",
     //   FocusFlag:false,
     //   Fans:[
-    //     {UserName:"粉丝1",HeadImage:"http://localhost:3000/1.jpg"},
-    //     {UserName:"粉丝2",HeadImage:"http://localhost:3000/2.jpg"},
-    //     {UserName:"粉丝3",HeadImage:"http://localhost:3000/3.jpg"},
-    //     {UserName:"粉丝4",HeadImage:"http://localhost:3000/4.jpg"},
-    //     {UserName:"粉丝5",HeadImage:"http://localhost:3000/5.jpg"},
+    //     {UserName:"粉丝1",HeadImage:"http://47.97.190.96:3000/1.jpg"},
+    //     {UserName:"粉丝2",HeadImage:"http://47.97.190.96:3000/2.jpg"},
+    //     {UserName:"粉丝3",HeadImage:"http://47.97.190.96:3000/3.jpg"},
+    //     {UserName:"粉丝4",HeadImage:"http://47.97.190.96:3000/4.jpg"},
+    //     {UserName:"粉丝5",HeadImage:"http://47.97.190.96:3000/5.jpg"},
     //   ],
     //   Focus:[
-    //     {UserName:"关注1",HeadImage:"http://localhost:3000/1.jpg"},
-    //     {UserName:"关注2",HeadImage:"http://localhost:3000/2.jpg"},
-    //     {UserName:"关注3",HeadImage:"http://localhost:3000/3.jpg"},
-    //     {UserName:"关注4",HeadImage:"http://localhost:3000/4.jpg"},
-    //     {UserName:"关注5",HeadImage:"http://localhost:3000/5.jpg"},
+    //     {UserName:"关注1",HeadImage:"http://47.97.190.96:3000/1.jpg"},
+    //     {UserName:"关注2",HeadImage:"http://47.97.190.96:3000/2.jpg"},
+    //     {UserName:"关注3",HeadImage:"http://47.97.190.96:3000/3.jpg"},
+    //     {UserName:"关注4",HeadImage:"http://47.97.190.96:3000/4.jpg"},
+    //     {UserName:"关注5",HeadImage:"http://47.97.190.96:3000/5.jpg"},
     //   ],
     //   WeiboList:[
     //     {UserName:"用户1",
-    //     HeadImage:"http://localhost:3000/1.jpg",
+    //     HeadImage:"http://47.97.190.96:3000/1.jpg",
     //     Content:"这是一条微博",
-    //     ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+    //     ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
     //   },
     //   {UserName:"用户2",
-    //     HeadImage:"http://localhost:3000/1.jpg",
+    //     HeadImage:"http://47.97.190.96:3000/1.jpg",
     //     Content:"这是一条微博",
-    //     ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+    //     ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
     //   },
     //   {UserName:"用户3",
-    //     HeadImage:"http://localhost:3000/1.jpg",
+    //     HeadImage:"http://47.97.190.96:3000/1.jpg",
     //     Content:"这是一条微博",
-    //     ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+    //     ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
     //   },
     //   {UserName:"用户4",
-    //     HeadImage:"http://localhost:3000/1.jpg",
+    //     HeadImage:"http://47.97.190.96:3000/1.jpg",
     //     Content:"这是一条微博",
-    //     ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+    //     ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
     //   },
     //   {UserName:"用户5",
-    //     HeadImage:"http://localhost:3000/1.jpg",
+    //     HeadImage:"http://47.97.190.96:3000/1.jpg",
     //     Content:"这是一条微博",
-    //     ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+    //     ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
     //   },
     //   ]
     // }
@@ -901,48 +904,48 @@ router.get("/GetMyPageInfo",async(ctx,next)=>{
    ctx.body=FinalResult;
 //   ctx.body={
 //     UserName:"测试用户",
-//     HeadImage:"http://localhost:3000/test.jpg",
+//     HeadImage:"http://47.97.190.96:3000/test.jpg",
 //     WeiboList:[
 //       {UserName:"用户1",
-//       HeadImage:"http://localhost:3000/1.jpg",
+//       HeadImage:"http://47.97.190.96:3000/1.jpg",
 //       Content:"这是一条微博",
-//       ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+//       ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
 //     },
 //     {UserName:"用户2",
-//       HeadImage:"http://localhost:3000/1.jpg",
+//       HeadImage:"http://47.97.190.96:3000/1.jpg",
 //       Content:"这是一条微博",
-//       ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+//       ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
 //     },
 //     {UserName:"用户3",
-//       HeadImage:"http://localhost:3000/1.jpg",
+//       HeadImage:"http://47.97.190.96:3000/1.jpg",
 //       Content:"这是一条微博",
-//       ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+//       ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
 //     },
 //     {UserName:"用户4",
-//       HeadImage:"http://localhost:3000/1.jpg",
+//       HeadImage:"http://47.97.190.96:3000/1.jpg",
 //       Content:"这是一条微博",
-//       ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+//       ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
 //     },
 //     {UserName:"用户5",
-//       HeadImage:"http://localhost:3000/1.jpg",
+//       HeadImage:"http://47.97.190.96:3000/1.jpg",
 //       Content:"这是一条微博",
-//       ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg","http://localhost:3000/4.jpg","http://localhost:3000/5.jpg"]
+//       ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg","http://47.97.190.96:3000/4.jpg","http://47.97.190.96:3000/5.jpg"]
 //     },
   
 //     ],
 //     Fans:[
-//       {UserName:"粉丝1",HeadImage:"http://localhost:3000/1.jpg"},
-//       {UserName:"粉丝2",HeadImage:"http://localhost:3000/2.jpg"},
-//       {UserName:"粉丝3",HeadImage:"http://localhost:3000/3.jpg"},
-//       {UserName:"粉丝4",HeadImage:"http://localhost:3000/4.jpg"},
-//       {UserName:"粉丝5",HeadImage:"http://localhost:3000/5.jpg"},
+//       {UserName:"粉丝1",HeadImage:"http://47.97.190.96:3000/1.jpg"},
+//       {UserName:"粉丝2",HeadImage:"http://47.97.190.96:3000/2.jpg"},
+//       {UserName:"粉丝3",HeadImage:"http://47.97.190.96:3000/3.jpg"},
+//       {UserName:"粉丝4",HeadImage:"http://47.97.190.96:3000/4.jpg"},
+//       {UserName:"粉丝5",HeadImage:"http://47.97.190.96:3000/5.jpg"},
 //     ],
 //     Focus:[
-//       {UserName:"关注1",HeadImage:"http://localhost:3000/1.jpg",FocusFlag:true},
-//       {UserName:"关注2",HeadImage:"http://localhost:3000/2.jpg",FocusFlag:false},
-//       {UserName:"关注3",HeadImage:"http://localhost:3000/3.jpg",FocusFlag:true},
-//       {UserName:"关注4",HeadImage:"http://localhost:3000/4.jpg",FocusFlag:false},
-//       {UserName:"关注5",HeadImage:"http://localhost:3000/5.jpg",FocusFlag:true},
+//       {UserName:"关注1",HeadImage:"http://47.97.190.96:3000/1.jpg",FocusFlag:true},
+//       {UserName:"关注2",HeadImage:"http://47.97.190.96:3000/2.jpg",FocusFlag:false},
+//       {UserName:"关注3",HeadImage:"http://47.97.190.96:3000/3.jpg",FocusFlag:true},
+//       {UserName:"关注4",HeadImage:"http://47.97.190.96:3000/4.jpg",FocusFlag:false},
+//       {UserName:"关注5",HeadImage:"http://47.97.190.96:3000/5.jpg",FocusFlag:true},
 //     ],
 
 
@@ -969,18 +972,18 @@ router.get("/WeiboDetail",async(ctx,next)=>{
   ctx.body=FinalResult;
   //  ctx.body={
   //    UserName:"发表微博的用户",
-  //    HeadImage:"http://localhost:3000/test.jpg",
+  //    HeadImage:"http://47.97.190.96:3000/test.jpg",
   //    ZanCount:22,
   //    ZanFlag:true,
   //    Content:"测试微博内容",
   //    CommentList:[
-  //      {UserName:"评论用户1",HeadImage:"http://localhost:3000/1.jpg",Content:"评论内容"},
-  //      {UserName:"评论用户1",HeadImage:"http://localhost:3000/1.jpg",Content:"评论内容"},
-  //      {UserName:"评论用户1",HeadImage:"http://localhost:3000/1.jpg",Content:"评论内容"},
-  //      {UserName:"评论用户1",HeadImage:"http://localhost:3000/1.jpg",Content:"评论内容"},
-  //      {UserName:"评论用户1",HeadImage:"http://localhost:3000/1.jpg",Content:"评论内容"},
+  //      {UserName:"评论用户1",HeadImage:"http://47.97.190.96:3000/1.jpg",Content:"评论内容"},
+  //      {UserName:"评论用户1",HeadImage:"http://47.97.190.96:3000/1.jpg",Content:"评论内容"},
+  //      {UserName:"评论用户1",HeadImage:"http://47.97.190.96:3000/1.jpg",Content:"评论内容"},
+  //      {UserName:"评论用户1",HeadImage:"http://47.97.190.96:3000/1.jpg",Content:"评论内容"},
+  //      {UserName:"评论用户1",HeadImage:"http://47.97.190.96:3000/1.jpg",Content:"评论内容"},
   //    ],
-  //    ImageList:["http://localhost:3000/1.jpg","http://localhost:3000/2.jpg","http://localhost:3000/3.jpg"]
+  //    ImageList:["http://47.97.190.96:3000/1.jpg","http://47.97.190.96:3000/2.jpg","http://47.97.190.96:3000/3.jpg"]
   //  }
 })
 router.get("/SearchWeibo",async(ctx,next)=>{
